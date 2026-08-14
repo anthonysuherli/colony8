@@ -20,7 +20,9 @@ const OP_COLOR: Record<string, string> = {
 };
 
 export default function App() {
-  const [runId, setRunId] = useState<string | null>(null);
+  const [runId, setRunId] = useState<string | null>(
+    () => new URLSearchParams(window.location.search).get("run"),
+  );
   const [question, setQuestion] = useState("What are the key thermal properties of water?");
   const [status, setStatus] = useState<string>("");
   const [health, setHealth] = useState<Record<string, unknown> | null>(null);
