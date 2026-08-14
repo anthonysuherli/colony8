@@ -65,11 +65,11 @@ def test_stale_snapshot_reclassifies(pool, run_id) -> None:
 
     def classify(cand, matches):
         calls["n"] += 1
-        if calls["n"] == 1:  # sabotage: invalidate the target out from under the resolver
+        if calls["n"] == 1:  # sabotage: bump the target's version out from under the resolver
             with pool.connection() as conn:
                 conn.execute(
-                    "UPDATE findings SET invalidated_at = now(), version = version + 1 "
-                    "WHERE id = %s", (base["finding_id"],),
+                    "UPDATE findings SET version = version + 1 WHERE id = %s",
+                    (base["finding_id"],),
                 )
         return Decision(op="SUPERSEDE", target_id=matches[0].id, reason="newer estimate")
 
