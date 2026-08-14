@@ -21,3 +21,12 @@ def test_audit_writes_health(pool, run_id, monkeypatch) -> None:
 def test_audit_skips_without_token(pool, run_id, monkeypatch) -> None:
     monkeypatch.setattr(audit, "_token_present", lambda: False)
     assert audit.audit_memory(pool, run_id) is None
+
+
+def test_audit_never_raises_on_llm_failure(pool, run_id, monkeypatch) -> None:
+    monkeypatch.setattr(audit, "_token_present", lambda: True)
+    monkeypatch.setattr(audit, "_mcp_sql", lambda q: {"live_findings": 1, "superseded": 0})
+    def boom(*a, **kw):
+        raise RuntimeError("bedrock down")
+    monkeypatch.setattr(audit, "llm_json", boom)
+    assert audit.audit_memory(pool, run_id) is None
