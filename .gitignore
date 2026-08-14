@@ -8,3 +8,8 @@ frontend/dist/
 uv.lock
 heap_profiler/
 cockroach-data/
+/dist/
+executiontrace_dump/
+goroutine_dump/
+inflight_trace_dump/
+pprof_dump/
