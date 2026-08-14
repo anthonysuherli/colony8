@@ -1,0 +1,26 @@
+[
+  {
+    "url": "https://demo.colony8.dev/alpine-cooking",
+    "title": "Alpine Cooking Handbook (2019)",
+    "topics": ["water", "boiling", "altitude"],
+    "content": "A common misconception holds that water always boils at 100C. In fact, at the altitude of a typical mountain hut (3000m) water boils at approximately 90C, and many older handbooks simply state that water boils at 90C."
+  },
+  {
+    "url": "https://demo.colony8.dev/nist-water",
+    "title": "NIST Water Properties Reference (2024)",
+    "topics": ["water", "boiling", "physics"],
+    "content": "At standard atmospheric pressure (101.325 kPa, sea level), pure water boils at 100.0C (99.97C to be precise). Boiling point decreases roughly 1C per 285m of elevation gain."
+  },
+  {
+    "url": "https://demo.colony8.dev/freezing",
+    "title": "Phase Transitions Primer",
+    "topics": ["water", "freezing", "physics"],
+    "content": "Pure water at standard pressure freezes at 0C. Dissolved salts depress the freezing point, which is why seawater freezes around -1.9C."
+  },
+  {
+    "url": "https://demo.colony8.dev/heat-capacity",
+    "title": "Thermal Properties of Liquids",
+    "topics": ["water", "heat", "physics"],
+    "content": "Water's specific heat capacity is 4.186 J/gC, unusually high among common liquids, which is why coastal climates are milder than continental ones."
+  }
+]
