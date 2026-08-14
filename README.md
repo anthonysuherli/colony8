@@ -150,6 +150,37 @@ it, then share `<cloudfront-url>/?run=<run_id>`.
 **Demo:** _coming soon_
 **Video:** _coming soon_
 
+
+## How it differs
+
+| | colony8 | typical agent-memory layers* |
+|---|---|---|
+| conflict handling | resolved at write time, in a serializable transaction | read-time ranking, or async consolidation (minutes–hours later) |
+| concurrent writers | version-fenced: one live fact, race-test proven | per-agent views can diverge over a shared archive |
+| history | supersede chains — retired, never deleted | facts updated or overwritten in place |
+| storage | SQL + vectors in one database, one transaction | separate vector + graph + KV stores stitched together |
+| agent restart | full recall — agents hold zero state | framework session state to rebuild |
+
+\* patterns documented across Mem0, Zep, and Letta/MemGPT public papers and docs.
+
+## Benchmarks
+
+Measured on a laptop against a single-node in-memory CockroachDB; LLM and
+embedding calls excluded (stub embeddings, rule classifier) — this measures the
+transactional memory substrate. Reproduce with `uv run python scripts/bench.py`.
+
+| operation | throughput | p50 | p95 |
+|---|---|---|---|
+| write, fast-path ADD (no conflict) | ~120 op/s | 8.3 ms | 9.7 ms |
+| semantic recall, k=5 (~200 rows) | ~350 op/s | 2.7 ms | 3.4 ms |
+| contended SUPERSEDE, 8 threads on one row | ~90 op/s | — | — |
+
+Contention run (200 conflicting writes targeting a single fact): exactly **1
+live fact**, 188 retired with full audit chains, 174 serialization retries
+absorbed, **0 lost writes**, 12 candidates parked as DEFERRED events (visible
+and retryable — never silently dropped). Numbers vary run to run; the
+invariants (one live fact, zero lost writes, zero silent drops) do not.
+
 ## License
 
 MIT
