@@ -20,22 +20,28 @@ def _default_deps() -> dict:
 
 def run_fleet(pool, run_id: str, question: str, *, fleet_size: int | None = None,
               deps: dict | None = None) -> dict:
-    d = deps or _default_deps()
-    n = fleet_size or get_settings().fleet_size
-    subtopics = d["plan_fn"](question, n)
-    with ThreadPoolExecutor(max_workers=n) as ex:
-        results = list(
-            ex.map(
-                lambda st: research_subtopic(
-                    pool, run_id, st, embed_fn=d["embed_fn"], classify_fn=d["classify_fn"],
-                    search_fn=d["search_fn"], extract_fn=d["extract_fn"],
-                ),
-                subtopics,
+    try:
+        d = deps or _default_deps()
+        n = fleet_size or get_settings().fleet_size
+        subtopics = d["plan_fn"](question, n)
+        with ThreadPoolExecutor(max_workers=n) as ex:
+            results = list(
+                ex.map(
+                    lambda st: research_subtopic(
+                        pool, run_id, st, embed_fn=d["embed_fn"],
+                        classify_fn=d["classify_fn"], search_fn=d["search_fn"],
+                        extract_fn=d["extract_fn"],
+                    ),
+                    subtopics,
+                )
             )
-        )
-    any_failed = any(r["failed"] for r in results)
-    status = "completed_with_failures" if any_failed else "completed"
-    with pool.connection() as conn:
-        conn.execute("UPDATE runs SET status = %s WHERE id = %s", (status, run_id))
-    return {"status": status, "submitted": sum(r["submitted"] for r in results),
-            "results": results}
+        any_failed = any(r["failed"] for r in results)
+        status = "completed_with_failures" if any_failed else "completed"
+        with pool.connection() as conn:
+            conn.execute("UPDATE runs SET status = %s WHERE id = %s", (status, run_id))
+        return {"status": status, "submitted": sum(r["submitted"] for r in results),
+                "results": results}
+    except Exception:
+        with pool.connection() as conn:
+            conn.execute("UPDATE runs SET status = %s WHERE id = %s", ("failed", run_id))
+        raise

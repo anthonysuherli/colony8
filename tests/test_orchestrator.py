@@ -55,3 +55,21 @@ def test_restart_recall(pool, run_id) -> None:
         assert live  # nothing lived in agent state; memory survived the restart
     finally:
         fresh.close()
+
+
+def test_fleet_failure_marks_run_failed(pool, run_id) -> None:
+    """Any unhandled error sets runs.status to 'failed' and re-raises."""
+    import pytest
+
+    deps = _stub_deps()
+
+    def boom(q, n):
+        raise RuntimeError("planner down")
+
+    deps["plan_fn"] = boom
+    with pytest.raises(RuntimeError, match="planner down"):
+        run_fleet(pool, run_id, "q", fleet_size=3, deps=deps)
+    with pool.connection() as conn:
+        status = conn.execute("SELECT status FROM runs WHERE id = %s",
+                              (run_id,)).fetchone()[0]
+    assert status == "failed"
