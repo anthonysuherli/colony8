@@ -9,7 +9,9 @@ PROV = [{"url": "https://example.com/a", "title": "Source A"}]
 def test_classify_parses_verdict(monkeypatch) -> None:
     monkeypatch.setattr(
         classifier, "llm_json",
-        lambda prompt, schema, **kw: {"op": "SUPERSEDE", "target_id": "abc", "reason": "contradicts"},
+        lambda prompt, schema, **kw: {
+            "op": "SUPERSEDE", "target_id": "abc", "reason": "contradicts",
+        },
     )
     cand = Candidate(title="t", claim="water boils at 100C", quote=None, provenance=PROV)
     matches = [Match(id="abc", title="old", claim="water boils at 90C", version=1, similarity=0.92)]

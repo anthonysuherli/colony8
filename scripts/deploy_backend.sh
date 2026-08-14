@@ -33,7 +33,7 @@ else
 fi
 
 aws lambda update-function-configuration --function-name colony8 --region $REGION \
-  --environment "Variables={DATABASE_URL=$DATABASE_URL,BEDROCK_MODEL_ID=${BEDROCK_MODEL_ID:-anthropic.claude-opus-5},BEDROCK_EMBED_MODEL_ID=${BEDROCK_EMBED_MODEL_ID:-amazon.titan-embed-text-v2:0},EMBED_DIM=${EMBED_DIM:-1024},FLEET_SIZE=${FLEET_SIZE:-3},DEMO_MODE=${DEMO_MODE:-true},TAVILY_API_KEY=${TAVILY_API_KEY:-},CRDB_MCP_URL=${CRDB_MCP_URL:-},CRDB_MCP_TOKEN=${CRDB_MCP_TOKEN:-}}"
+  --environment "Variables={DATABASE_URL=$DATABASE_URL,BEDROCK_MODEL_ID=${BEDROCK_MODEL_ID:-anthropic.claude-opus-5},BEDROCK_EMBED_MODEL_ID=${BEDROCK_EMBED_MODEL_ID:-amazon.titan-embed-text-v2:0},EMBED_DIM=${EMBED_DIM:-1024},FLEET_SIZE=${FLEET_SIZE:-3},DEMO_MODE=${DEMO_MODE:-true},ALLOW_LAUNCH=${ALLOW_LAUNCH:-false},TAVILY_API_KEY=${TAVILY_API_KEY:-},CRDB_MCP_URL=${CRDB_MCP_URL:-https://cockroachlabs.cloud/mcp},CRDB_MCP_TOKEN=${CRDB_MCP_TOKEN:-}}"
 
 aws lambda get-function-url-config --function-name colony8 --region $REGION \
   --query FunctionUrl --output text

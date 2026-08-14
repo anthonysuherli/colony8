@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     crdb_mcp_url: str = "https://cockroachlabs.cloud/mcp"
     crdb_mcp_token: str = ""
     fleet_size: int = 3
+    allow_launch: bool = True
 
 
 @lru_cache

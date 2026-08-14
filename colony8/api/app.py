@@ -32,8 +32,17 @@ class RunRequest(BaseModel):
     question: str
 
 
+def _valid_run_id(run_id: str) -> str:
+    try:
+        return str(uuid.UUID(run_id))
+    except ValueError as exc:
+        raise HTTPException(404) from exc
+
+
 @app.post("/runs")
 def create_run(req: RunRequest) -> dict:
+    if not get_settings().allow_launch:
+        raise HTTPException(403, "launcher disabled on this deployment")
     rid = str(uuid.uuid4())
     with pool().connection() as conn:
         conn.execute("INSERT INTO runs (id, question) VALUES (%s, %s)", (rid, req.question))
@@ -44,6 +53,7 @@ def create_run(req: RunRequest) -> dict:
 
 @app.get("/runs/{run_id}")
 def get_run(run_id: str) -> dict:
+    run_id = _valid_run_id(run_id)
     with pool().connection() as conn:
         row = conn.execute(
             "SELECT id, question, status, health, created_at FROM runs WHERE id = %s", (run_id,)
@@ -56,6 +66,7 @@ def get_run(run_id: str) -> dict:
 
 @app.get("/runs/{run_id}/ledger")
 def get_ledger(run_id: str) -> dict:
+    run_id = _valid_run_id(run_id)
     return ledger(pool(), run_id)
 
 

@@ -11,7 +11,8 @@ log = logging.getLogger(__name__)
 # CockroachDB Distributed Vector Indexing (C-SPANN). Best-effort: correctness never
 # depends on the index — recall falls back to a scan — but cloud clusters get it.
 VECTOR_INDEX_SQL = (
-    "CREATE VECTOR INDEX IF NOT EXISTS findings_embedding_idx ON findings (embedding)"
+    "CREATE VECTOR INDEX IF NOT EXISTS findings_embedding_idx "
+    "ON findings (run_id, embedding)"
 )
 
 
@@ -26,8 +27,8 @@ def init_schema(pool: ConnectionPool) -> None:
     try:
         with pool.connection() as conn:
             conn.execute("SET CLUSTER SETTING feature.vector_index.enabled = true")
-    except Exception:  # noqa: BLE001 — setting absent on newer versions where it's default-on
-        pass
+    except Exception as exc:  # noqa: BLE001 — setting absent on newer versions, default-on there
+        log.debug("cluster setting skipped: %s", exc)
     try:
         with pool.connection() as conn:
             conn.execute(VECTOR_INDEX_SQL)

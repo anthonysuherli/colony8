@@ -19,10 +19,10 @@ with the full chain kept for audit.
                         │  runs · ledger · supersede  │
                         │  chains · health report     │
                         └──────────────┬──────────────┘
-                                       │ SSE / REST
+                                       │ REST (2s poll)
 ┌──────────┐   spawn   ┌───────────────┴─────────────┐
 │ planner  ├──────────►│  FastAPI orchestrator       │
-│ (Bedrock)│           │  (Lambda; asyncio in dev)   │
+│ (Bedrock)│           │  (Lambda; threads in dev)   │
 └──────────┘           └──┬─────────┬─────────┬──────┘
                           │         │         │
                    researcher  researcher  researcher      ← stateless
@@ -86,6 +86,11 @@ applied — the write is never lost, just left for a human or a later pass.
 and `superseded_by` set, and stays queryable forever. The ledger UI renders
 both the live findings and the full supersede chain behind each one.
 
+One honest gap: two agents concurrently `ADD`ing brand-new, near-identical
+claims can both land — there is no existing row yet to fence the write on.
+The duplicate isn't lost; it's retired the moment a later candidate matches
+and supersedes it.
+
 ## Quickstart
 
 ### Local dev
@@ -101,7 +106,8 @@ cd frontend && npm install && npm run dev     # UI, http://localhost:5173
 
 Set `DEMO_MODE=true` to serve web search from the canned `demo/sources.json`
 corpus instead of live Tavily calls — this is what the recorded demo and
-video run against, so the fleet behaves identically on every replay.
+video run against. The source corpus is fixed, but LLM extraction may vary
+slightly between runs, so replays are not guaranteed byte-identical.
 
 ### Environment variables
 
@@ -134,6 +140,10 @@ The deployed demo serves **replay** of a completed run (the launcher itself
 is a local/demo-recording affordance — Lambda cannot host the background
 worker thread that drives a live fleet run). Any completed run can be
 reopened by appending `?run=<run-id>` to the UI URL.
+
+To populate the replay run: run the backend locally with `DATABASE_URL`
+pointed at the cloud cluster and `DEMO_MODE=true`, complete a run against
+it, then share `<cloudfront-url>/?run=<run_id>`.
 
 ## Demo
 

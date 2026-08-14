@@ -23,6 +23,7 @@ export default function App() {
   const [runId, setRunId] = useState<string | null>(
     () => new URLSearchParams(window.location.search).get("run"),
   );
+  const [replay] = useState(() => new URLSearchParams(window.location.search).has("run"));
   const [question, setQuestion] = useState("What are the key thermal properties of water?");
   const [status, setStatus] = useState<string>("");
   const [health, setHealth] = useState<Record<string, unknown> | null>(null);
@@ -62,13 +63,15 @@ export default function App() {
       <header>
         <h1>colony8</h1>
         <p className="tag">stateless agents · one transactional memory · CockroachDB × Bedrock</p>
-        <div className="launcher">
-          <input value={question} onChange={(e) => setQuestion(e.target.value)} />
-          <button onClick={startRun} disabled={!!runId && status === "running"}>
-            {status === "running" ? "fleet running…" : "launch fleet"}
-          </button>
-          {status && <span className={`status ${status}`}>{status}</span>}
-        </div>
+        {!replay && (
+          <div className="launcher">
+            <input value={question} onChange={(e) => setQuestion(e.target.value)} />
+            <button onClick={startRun} disabled={!!runId && status === "running"}>
+              {status === "running" ? "fleet running…" : "launch fleet"}
+            </button>
+          </div>
+        )}
+        {status && <span className={`status ${status}`}>{status}</span>}
       </header>
 
       <div className="panes">
