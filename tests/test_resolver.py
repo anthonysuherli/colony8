@@ -16,7 +16,9 @@ def _never_called(cand, matches):  # classifier must not run on the fast path
 
 
 def test_add_fast_path(pool, run_id) -> None:
-    out = submit_finding(pool, run_id, _cand("orbit: mars year is 687 days"), fake_embed, _never_called)
+    out = submit_finding(
+        pool, run_id, _cand("orbit: mars year is 687 days"), fake_embed, _never_called
+    )
     assert out["op"] == "ADD" and out["finding_id"]
 
 
@@ -31,11 +33,15 @@ def test_noop(pool, run_id) -> None:
 
 
 def test_supersede_chain(pool, run_id) -> None:
-    first = submit_finding(pool, run_id, _cand("boil: water boils at 90C"), fake_embed, _never_called)
+    first = submit_finding(
+        pool, run_id, _cand("boil: water boils at 90C"), fake_embed, _never_called
+    )
     out = submit_finding(
         pool, run_id, _cand("boil: water boils at 100C at sea level"),
         fake_embed,
-        lambda c, m: Decision(op="SUPERSEDE", target_id=m[0].id, reason="contradicts: better source"),
+        lambda c, m: Decision(
+            op="SUPERSEDE", target_id=m[0].id, reason="contradicts: better source"
+        ),
     )
     assert out["op"] == "SUPERSEDE"
     live = recall(pool, run_id, fake_embed("boil: temp"), k=10)
@@ -60,7 +66,9 @@ def test_update(pool, run_id) -> None:
 
 def test_stale_snapshot_reclassifies(pool, run_id) -> None:
     """If the target mutates between snapshot and apply, the resolver re-runs."""
-    base = submit_finding(pool, run_id, _cand("age: universe is 13B years"), fake_embed, _never_called)
+    base = submit_finding(
+        pool, run_id, _cand("age: universe is 13B years"), fake_embed, _never_called
+    )
     calls = {"n": 0}
 
     def classify(cand, matches):
@@ -89,7 +97,8 @@ def test_deferred_after_exhaustion(pool, run_id) -> None:
         return Decision(op="SUPERSEDE", target_id=matches[0].id, reason="x")
 
     out = submit_finding(
-        pool, run_id, _cand("mass: earth weighs 5.97e24 kg"), fake_embed, always_stale, max_attempts=3
+        pool, run_id, _cand("mass: earth weighs 5.97e24 kg"), fake_embed,
+        always_stale, max_attempts=3,
     )
     assert out["op"] == "DEFERRED" and out["finding_id"] is None
     with pool.connection() as conn:

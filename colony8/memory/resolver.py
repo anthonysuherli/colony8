@@ -69,21 +69,21 @@ def _apply(pool, run_id: str, cand: Candidate, embedding: list[float],
            decision: Decision, matches: list[Match]) -> dict:
     with pool.connection() as conn:
         with conn.transaction():
-            if matches:
-                rows = conn.execute(
-                    "SELECT id, version FROM findings "
-                    "WHERE id = ANY(%s) AND invalidated_at IS NULL FOR UPDATE",
-                    ([m.id for m in matches],),
-                ).fetchall()
-                current = {str(r[0]): r[1] for r in rows}
-                for m in matches:
-                    if current.get(m.id) != m.version:
-                        raise StaleSnapshot(f"{m.id} moved")
-
             if decision.op == "ADD":
                 fid = insert_finding(conn, run_id, cand, embedding)
                 log_event(conn, run_id, "ADD", cand.title, new_id=fid, reason=decision.reason)
                 return {"op": "ADD", "finding_id": fid, "target_id": None}
+
+            # NOOP, UPDATE, SUPERSEDE all touch exactly one row: lock/verify only that one.
+            target = next((m for m in matches if m.id == decision.target_id), None)
+            if target is None:
+                raise StaleSnapshot(f"target {decision.target_id} not in snapshot")
+            row = conn.execute(
+                "SELECT version FROM findings WHERE id = %s AND invalidated_at IS NULL FOR UPDATE",
+                (target.id,),
+            ).fetchone()
+            if row is None or row[0] != target.version:
+                raise StaleSnapshot(f"{target.id} moved")
 
             if decision.op == "NOOP":
                 log_event(conn, run_id, "NOOP", cand.title,
@@ -91,7 +91,6 @@ def _apply(pool, run_id: str, cand: Candidate, embedding: list[float],
                 return {"op": "NOOP", "finding_id": None, "target_id": decision.target_id}
 
             # UPDATE and SUPERSEDE share mechanics: insert winner, retire loser.
-            target = next(m for m in matches if m.id == decision.target_id)
             fid = insert_finding(conn, run_id, cand, embedding)
             invalidate(conn, target.id, superseded_by=fid, expected_version=target.version)
             log_event(conn, run_id, decision.op, cand.title,
