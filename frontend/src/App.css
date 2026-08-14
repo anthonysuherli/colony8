@@ -1,0 +1,18 @@
+:root { color-scheme: dark; }
+body { margin: 0; background: #0d1117; color: #e6edf3; font: 14px/1.5 ui-monospace, monospace; }
+main { max-width: 1100px; margin: 0 auto; padding: 24px; }
+h1 { margin: 0; letter-spacing: 2px; }
+.tag { color: #8b949e; margin-top: 2px; }
+.launcher { display: flex; gap: 8px; margin: 16px 0; }
+.launcher input { flex: 1; background: #161b22; color: inherit; border: 1px solid #30363d; padding: 8px; border-radius: 6px; }
+.launcher button { background: #238636; color: #fff; border: 0; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+.status { align-self: center; color: #d29922; }
+.status.completed { color: #3fb950; }
+.panes { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; }
+.finding { border: 1px solid #30363d; border-left: 3px solid #3fb950; border-radius: 6px; padding: 8px 12px; margin: 8px 0; }
+.finding.dead { border-left-color: #f85149; opacity: 0.6; }
+.finding footer { color: #8b949e; font-size: 12px; }
+.finding a { color: #58a6ff; margin-right: 8px; }
+.event { padding: 4px 0; border-bottom: 1px dashed #21262d; }
+pre { background: #161b22; padding: 12px; border-radius: 6px; overflow-x: auto; }
+h2 small { color: #8b949e; font-weight: normal; }
