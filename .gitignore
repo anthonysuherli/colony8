@@ -6,3 +6,5 @@ node_modules/
 frontend/dist/
 .pytest_cache/
 uv.lock
+heap_profiler/
+cockroach-data/
