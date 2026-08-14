@@ -31,10 +31,15 @@ def run_id(pool) -> str:
 
 def fake_embed(text: str) -> list[float]:
     """Deterministic 1024-dim embedding: same topic prefix -> nearly identical vectors."""
+    import hashlib
+
+    def h(s: str) -> int:
+        return int.from_bytes(hashlib.md5(s.encode()).digest()[:4], "big")
+
     v = [0.0] * 1024
-    topic = hash(text.split(":")[0]) % 1000  # everything before ':' is the topic bucket
+    topic = h(text.split(":")[0]) % 1000  # everything before ':' is the topic bucket
     v[topic % 1024] = 1.0
     v[(topic + 7) % 1024] = 0.3
-    salt = hash(text) % 97
+    salt = h(text) % 97
     v[1000 + salt % 24] = 0.05  # tiny per-text noise, cosine stays ~1 within a topic
     return v

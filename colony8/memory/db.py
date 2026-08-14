@@ -10,7 +10,9 @@ log = logging.getLogger(__name__)
 
 # CockroachDB Distributed Vector Indexing (C-SPANN). Best-effort: correctness never
 # depends on the index — recall falls back to a scan — but cloud clusters get it.
-VECTOR_INDEX_SQL = "CREATE VECTOR INDEX IF NOT EXISTS findings_embedding_idx ON findings (embedding)"
+VECTOR_INDEX_SQL = (
+    "CREATE VECTOR INDEX IF NOT EXISTS findings_embedding_idx ON findings (embedding)"
+)
 
 
 def make_pool(conninfo: str) -> ConnectionPool:
