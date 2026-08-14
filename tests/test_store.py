@@ -38,3 +38,15 @@ def test_recall_excludes_invalidated(pool, run_id) -> None:
         invalidate(conn, old, superseded_by=new, expected_version=1)
     ids = [m.id for m in recall(pool, run_id, emb, k=10)]
     assert old not in ids and new in ids
+
+
+def test_invalidate_stale_version_raises(pool, run_id) -> None:
+    from colony8.memory.store import StaleSnapshot, invalidate
+
+    emb = fake_embed("stale: some fact")
+    with pool.connection() as conn:
+        a = insert_finding(conn, run_id, _cand("stale: some fact"), emb)
+        b = insert_finding(conn, run_id, _cand("stale: replacement"), emb)
+        invalidate(conn, a, superseded_by=b, expected_version=1)
+        with pytest.raises(StaleSnapshot):
+            invalidate(conn, a, superseded_by=b, expected_version=1)  # already gone
