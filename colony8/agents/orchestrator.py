@@ -39,6 +39,11 @@ def run_fleet(pool, run_id: str, question: str, *, fleet_size: int | None = None
         status = "completed_with_failures" if any_failed else "completed"
         with pool.connection() as conn:
             conn.execute("UPDATE runs SET status = %s WHERE id = %s", (status, run_id))
+        from colony8.agents.audit import audit_memory
+        try:
+            audit_memory(pool, run_id)
+        except Exception:  # noqa: BLE001
+            pass
         return {"status": status, "submitted": sum(r["submitted"] for r in results),
                 "results": results}
     except Exception:
