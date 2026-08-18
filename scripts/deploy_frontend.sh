@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Build the UI against the Lambda URL, ship to S3, front with CloudFront.
+# Build the UI against the API URL, ship to S3, front with CloudFront.
 set -euo pipefail
 REGION=${AWS_REGION:-us-east-1}
 BUCKET=colony8-ui-$(aws sts get-caller-identity --query Account --output text)
-API_URL=$1  # the Lambda function URL, no trailing slash
+API_URL=$1  # the API Gateway URL deploy_backend.sh printed, no trailing slash
 
 cd frontend
 echo "VITE_API_BASE=$API_URL" > .env.production
@@ -11,6 +11,10 @@ npm run build
 aws s3 mb s3://$BUCKET --region $REGION 2>/dev/null || true
 aws s3 website s3://$BUCKET --index-document index.html
 aws s3 sync dist/ s3://$BUCKET --delete
+# New buckets ship with Block Public Access on, which rejects the public
+# read policy below — clear it first (this bucket exists only to serve the UI).
+aws s3api put-public-access-block --bucket $BUCKET --public-access-block-configuration \
+  BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false
 aws s3api put-bucket-policy --bucket $BUCKET --policy "{
   \"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",
   \"Action\":\"s3:GetObject\",\"Resource\":\"arn:aws:s3:::$BUCKET/*\"}]}"

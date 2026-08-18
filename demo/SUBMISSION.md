@@ -60,7 +60,7 @@ memory. Every candidate finding walks the same pipeline before it can land:
 
 ```
 candidate ──► 1 SNAPSHOT ────────► 2 CLASSIFY ─────────► 3 APPLY
-              vector recall,        Claude verdict:        one SERIALIZABLE txn
+              vector recall,        LLM verdict:           one SERIALIZABLE txn
               no lock held          ADD · UPDATE ·         SELECT ... FOR UPDATE
                   ▲                 NOOP · SUPERSEDE       + version fence
                   │                                            │
@@ -97,8 +97,10 @@ CockroachDB carries the whole memory: two C-SPANN vector indexes (one run-scoped
 the write path, one colony-wide for cross-session recall), serializable transactions
 for the resolver, and the Cloud Managed MCP Server as the *only* access path for the
 memory-audit agent. Bedrock runs the planner, researchers, the op classifier and audit
-narration on Claude, with Titan v2 embeddings. The API ships as a Lambda container
-image; the ledger UI is React on S3 + CloudFront; `ccloud` scripts the provisioning.
+narration through the Converse API — Nova Pro on the deployed demo; any Claude id drops
+in via `BEDROCK_MODEL_ID` — with Titan v2 embeddings. The API ships as a Lambda container
+image behind API Gateway; the ledger UI is React on S3 + CloudFront;
+`scripts/provision_cloud.sh` scripts the provisioning via `ccloud`.
 
 ### The numbers
 
@@ -176,13 +178,17 @@ audit chain. The most useful benchmark was the one we lost.
   query shows `• vector search` against the index.
 - **CockroachDB Cloud Managed MCP Server** — the memory-audit agent's only access
   path. It introspects the fleet's own memory over read-only SQL via MCP and produces
-  the health panel (contradiction rate, supersede counts) shown in the UI.
+  the narrated health report (contradiction rate, supersede counts) attached to a run
+  when `CRDB_MCP_TOKEN` is set; the hosted replay runs were populated without it, so
+  their ledger stats come from the ledger API directly.
 - **ccloud CLI** — `scripts/provision_cloud.sh` creates the free-tier cluster and SQL
   user and prints the connection string, so provisioning is scripted and repeatable.
-- **Amazon Bedrock** — Claude (via the Mantle endpoint) for the planner, the
-  researchers, the ADD/UPDATE/NOOP/SUPERSEDE classifier and the audit narration;
-  Titan Text Embeddings v2 for the vectors the index stores.
-- **AWS Lambda** — container-image runtime for the FastAPI surface and ledger replay.
+- **Amazon Bedrock** — the Converse API for the planner, the researchers, the
+  ADD/UPDATE/NOOP/SUPERSEDE classifier and the audit narration (Nova Pro on the
+  deployed demo; Claude ids drop in via `BEDROCK_MODEL_ID` once an account's Anthropic
+  use-case form is approved); Titan Text Embeddings v2 for the vectors the index stores.
+- **AWS Lambda + API Gateway** — container-image runtime for the FastAPI surface and
+  ledger replay, fronted by an HTTP API.
 - **Amazon S3 + CloudFront** — static hosting and CDN for the React ledger UI.
 
 ## Feedback on tools (optional Devpost field)
@@ -247,7 +253,7 @@ Chapters
 2:31  Repo and license
 
 Built with CockroachDB (distributed vector indexing, Cloud Managed MCP Server, ccloud
-CLI) and AWS (Bedrock for Claude + Titan embeddings, Lambda, S3 + CloudFront).
+CLI) and AWS (Bedrock LLMs + Titan embeddings, Lambda, S3 + CloudFront).
 
 Code, benchmarks and the full write-up: https://github.com/anthonysuherli/colony8
 MIT licensed. Runs on free tiers.

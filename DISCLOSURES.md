@@ -10,6 +10,15 @@
   author; no code was copied.
 - Third-party services: Tavily (web search). The demo corpus in `demo/sources.json`
   is original content written for this project.
+- Deployed demo note (2026-08-17): the hosted replay runs were populated with
+  `us.amazon.nova-pro-v1:0` via the Bedrock Converse API — the AWS account's Anthropic
+  use-case form was pending at deploy time, which gates every Claude model id; any
+  Claude id drops in via `BEDROCK_MODEL_ID` unchanged. The hosted CockroachDB Cloud
+  cluster was provisioned through the Cloud console rather than
+  `scripts/provision_cloud.sh` (the script remains the scripted path), and the Lambda
+  is fronted by an API Gateway HTTP API because Lambda Function URLs returned 403 on
+  this account. The hosted runs were populated without `CRDB_MCP_TOKEN`, so their
+  ledgers carry no MCP-narrated health report.
 - Recording note: in `demo/colony8-demo.mp4`, the UI segments were recorded with the
   Bedrock LLM calls replaced by deterministic stubs (the recording machine has no AWS
   credentials). The resolver, the serializable CockroachDB transactions, the supersede

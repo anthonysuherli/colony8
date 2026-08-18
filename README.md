@@ -43,8 +43,8 @@ Every tool below is load-bearing on the demo path — none is decorative.
 | CockroachDB Distributed Vector Indexing | semantic recall before every write, feeding candidate matches into the resolver | [`memory/db.py`](colony8/memory/db.py), [`memory/store.py`](colony8/memory/store.py) |
 | CockroachDB Cloud Managed MCP Server | the memory-audit agent's *only* access path — read-only SQL over MCP | [`agents/audit.py`](colony8/agents/audit.py) |
 | ccloud CLI | scripted, repeatable cluster + SQL user provisioning | [`scripts/provision_cloud.sh`](scripts/provision_cloud.sh) |
-| Amazon Bedrock | planner / researcher / audit LLM (Claude via the Mantle endpoint) and Titan embeddings | [`ai/bedrock.py`](colony8/ai/bedrock.py) |
-| AWS Lambda | stateless runtime for the API and ledger replay in production | [`api/app.py`](colony8/api/app.py), [`Dockerfile`](Dockerfile) |
+| Amazon Bedrock | planner / researcher / audit LLM via the Converse API (Nova Pro on the deployed demo; any Claude id drops in via `BEDROCK_MODEL_ID`) and Titan embeddings | [`ai/bedrock.py`](colony8/ai/bedrock.py) |
+| AWS Lambda + API Gateway | stateless runtime for the API and ledger replay in production, fronted by an HTTP API | [`api/app.py`](colony8/api/app.py), [`Dockerfile`](Dockerfile) |
 | Amazon S3 + CloudFront | static hosting and CDN for the ledger UI | [`scripts/deploy_frontend.sh`](scripts/deploy_frontend.sh) |
 
 ### The vector index is on the hot path — here's the proof
@@ -183,8 +183,8 @@ AWS credentials are read from the standard AWS env/profile chain, not from `.env
 ```bash
 ./scripts/provision_cloud.sh          # one-time: CockroachDB Cloud cluster + SQL user
 set -a; source .env; set +a
-./scripts/deploy_backend.sh           # builds the Lambda image, prints the function URL
-./scripts/deploy_frontend.sh https://<function-url>   # builds the UI, ships to S3+CloudFront
+./scripts/deploy_backend.sh           # builds the Lambda image, prints the API Gateway URL
+./scripts/deploy_frontend.sh https://<api-url>   # builds the UI, ships to S3+CloudFront
 ```
 
 The deployed demo serves **replay** of a completed run. To populate it: run the
@@ -200,7 +200,7 @@ complete a run against it, then share `<cloudfront-url>/?run=<run_id>`.
 | **Video** | [`demo/colony8-demo.mp4`](demo/colony8-demo.mp4) — 2:39, [segment timestamps](demo/VIDEO_TIMESTAMPS.md); a context-anchor schematic tracks both sessions beside the footage from 0:09–1:20 |
 | **Video (v2 cut)** | [`video/`](video/) — 2:24, an animated Remotion wrap of the earlier 2:27 cut; predates the cross-session INJECT beat ([timestamps](video/TIMESTAMPS.md)) |
 | **Slide deck** | [`presentation/`](presentation/) — 14 slides, `npm run export` for PDF/PNG |
-| **Live demo** | see [`demo/SUBMISSION.md`](demo/SUBMISSION.md) — the CloudFront URL is filled in at deploy time |
+| **Live demo** | [supersede story](https://d70tlsfhdj221.cloudfront.net/?run=3afd8685-a815-4d81-b094-50455dda5ded) · [cross-session INJECT story](https://d70tlsfhdj221.cloudfront.net/?run=ddb06ee2-470f-4f07-b7bb-6f0d16d81728) — replay of runs populated against the hosted CockroachDB Cloud cluster |
 | **Run it yourself** | [Quickstart](#local-dev) above; a full local run takes about a minute |
 
 The demo asks a fleet about the thermal properties of water. A 2019 handbook claims
