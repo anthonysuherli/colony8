@@ -8,7 +8,22 @@ import httpx
 
 from colony8.config import get_settings
 
-_DEMO_PATH = Path(__file__).resolve().parent.parent / "demo" / "sources.json"
+# Repo checkout puts demo/ beside the package; the Lambda image installs the package
+# into site-packages and copies demo/ to the task root, so check the working dir too.
+_DEMO_CANDIDATES = (
+    Path(__file__).resolve().parent.parent / "demo" / "sources.json",
+    Path.cwd() / "demo" / "sources.json",
+)
+
+
+def _demo_corpus_path() -> Path:
+    for p in _DEMO_CANDIDATES:
+        if p.is_file():
+            return p
+    raise FileNotFoundError(
+        f"DEMO_MODE is on but no demo corpus found at any of: "
+        f"{', '.join(str(p) for p in _DEMO_CANDIDATES)}"
+    )
 
 
 def _settings_demo() -> bool:
@@ -17,7 +32,7 @@ def _settings_demo() -> bool:
 
 def search_sources(query: str, k: int = 3) -> list[dict]:
     if _settings_demo():
-        corpus = json.loads(_DEMO_PATH.read_text())
+        corpus = json.loads(_demo_corpus_path().read_text())
         words = set(query.lower().split())
         hits = [s for s in corpus if words & set(s["topics"])]
         return (hits or corpus)[:k]

@@ -57,6 +57,39 @@ def test_restart_recall(pool, run_id) -> None:
         fresh.close()
 
 
+def test_cross_session_injection(pool, run_id) -> None:
+    """Session 2's researchers get session 1's claims in-context; the ledger says so."""
+    import uuid
+
+    run_fleet(pool, run_id, "thermal properties of water", fleet_size=3, deps=_stub_deps())
+
+    rid2 = str(uuid.uuid4())
+    with pool.connection() as conn:
+        conn.execute("INSERT INTO runs (id, question) VALUES (%s, %s)",
+                     (rid2, "cooking at altitude"))
+
+    seen: list[list[str]] = []
+    deps = _stub_deps()
+    inner = deps["extract_fn"]
+
+    def spying_extract(subtopic, source, known_claims):
+        seen.append(list(known_claims))
+        return inner(subtopic, source, known_claims)
+
+    deps["extract_fn"] = spying_extract
+    run_fleet(pool, rid2, "cooking at altitude", fleet_size=3, deps=deps)
+
+    with pool.connection() as conn:
+        run1_claims = {r[0] for r in conn.execute(
+            "SELECT content->>'claim' FROM findings WHERE run_id = %s", (run_id,)
+        ).fetchall()}
+        ops = [r[0] for r in conn.execute(
+            "SELECT op FROM resolution_events WHERE run_id = %s", (rid2,)).fetchall()]
+    injected = {c for knowns in seen for c in knowns}
+    assert injected & run1_claims  # session 1's memory reached session 2's prompt
+    assert "INJECT" in ops  # and the moment is on session 2's ledger
+
+
 def test_fleet_failure_marks_run_failed(pool, run_id) -> None:
     """Any unhandled error sets runs.status to 'failed' and re-raises."""
     import pytest

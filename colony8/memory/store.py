@@ -29,6 +29,7 @@ class Match:
     claim: str
     version: int
     similarity: float
+    run_id: str | None = None
 
 
 def vec(embedding: list[float]) -> str:
@@ -55,19 +56,80 @@ def insert_finding(conn, run_id: str, cand: Candidate, embedding: list[float]) -
     return str(row[0])
 
 
-def recall(pool, run_id: str, embedding: list[float], k: int = 5) -> list[Match]:
+_INDEXED = """
+    SELECT id, title, content->>'claim', version, 1 - (embedding <=> %s::VECTOR),
+           invalidated_at
+    FROM findings
+    WHERE run_id = %s
+    ORDER BY embedding <=> %s::VECTOR
+    LIMIT %s
+"""
+
+_EXACT = """
+    SELECT id, title, content->>'claim', version, 1 - (embedding <=> %s::VECTOR),
+           invalidated_at
+    FROM findings
+    WHERE run_id = %s AND invalidated_at IS NULL
+    ORDER BY embedding <=> %s::VECTOR
+    LIMIT %s
+"""
+
+
+_COLONY_INDEXED = """
+    SELECT id, title, content->>'claim', version, 1 - (embedding <=> %s::VECTOR),
+           invalidated_at, run_id
+    FROM findings
+    ORDER BY embedding <=> %s::VECTOR
+    LIMIT %s
+"""
+
+_COLONY_EXACT = """
+    SELECT id, title, content->>'claim', version, 1 - (embedding <=> %s::VECTOR),
+           invalidated_at, run_id
+    FROM findings
+    WHERE invalidated_at IS NULL
+    ORDER BY embedding <=> %s::VECTOR
+    LIMIT %s
+"""
+
+
+def recall_colony(pool, embedding: list[float], k: int = 5) -> list[Match]:
+    """Nearest live findings across every run — the colony's whole memory.
+
+    Same index-first shape as recall(): the liveness predicate would defeat the
+    colony vector index too, so over-fetch, filter in Python, and fall back to the
+    exact filtered query when the window saturates.
+    """
+    window = k * 4 + 20
+    args = (vec(embedding), vec(embedding))
     with pool.connection() as conn:
-        rows = conn.execute(
-            """
-            SELECT id, title, content->>'claim', version, 1 - (embedding <=> %s::VECTOR)
-            FROM findings
-            WHERE run_id = %s AND invalidated_at IS NULL
-            ORDER BY embedding <=> %s::VECTOR
-            LIMIT %s
-            """,
-            (vec(embedding), run_id, vec(embedding), k),
-        ).fetchall()
-    return [Match(str(r[0]), r[1], r[2] or "", r[3], float(r[4])) for r in rows]
+        rows = conn.execute(_COLONY_INDEXED, (*args, window)).fetchall()
+        live = [r for r in rows if r[5] is None]
+        if len(live) < k and len(rows) >= window:
+            live = conn.execute(_COLONY_EXACT, (*args, k)).fetchall()
+    return [Match(str(r[0]), r[1], r[2] or "", r[3], float(r[4]), str(r[6])) for r in live[:k]]
+
+
+def recall(pool, run_id: str, embedding: list[float], k: int = 5) -> list[Match]:
+    """Nearest live findings for a run.
+
+    A `WHERE invalidated_at IS NULL` predicate defeats the C-SPANN vector index — the
+    planner drops to a full scan — so the fast path orders without it and filters
+    retired rows afterwards, over-fetching to absorb the ones that crowd the window.
+
+    Under heavy contention a fact can accumulate more retired ancestors than the
+    window holds, which would hide the live row and let a duplicate be ADDed. So when
+    the window comes back saturated and still short of k live rows, fall back to the
+    exact filtered query: the index is a speed-up, never the thing correctness rests on.
+    """
+    window = k * 4 + 20
+    args = (vec(embedding), run_id, vec(embedding))
+    with pool.connection() as conn:
+        rows = conn.execute(_INDEXED, (*args, window)).fetchall()
+        live = [r for r in rows if r[5] is None]
+        if len(live) < k and len(rows) >= window:
+            live = conn.execute(_EXACT, (*args, k)).fetchall()
+    return [Match(str(r[0]), r[1], r[2] or "", r[3], float(r[4]), run_id) for r in live[:k]]
 
 
 def invalidate(conn, finding_id: str, superseded_by: str, expected_version: int) -> None:

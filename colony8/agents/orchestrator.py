@@ -1,10 +1,13 @@
 """Fan the fleet out on threads. Agents hold no state: CockroachDB is the only shared thing."""
 from __future__ import annotations
 
+import logging
 from concurrent.futures import ThreadPoolExecutor
 
 from colony8.agents.researcher import research_subtopic
 from colony8.config import get_settings
+
+log = logging.getLogger(__name__)
 
 
 def _default_deps() -> dict:
@@ -47,6 +50,11 @@ def run_fleet(pool, run_id: str, question: str, *, fleet_size: int | None = None
         return {"status": status, "submitted": sum(r["submitted"] for r in results),
                 "results": results}
     except Exception:
-        with pool.connection() as conn:
-            conn.execute("UPDATE runs SET status = %s WHERE id = %s", ("failed", run_id))
+        # The run row must reach a terminal status or the UI polls "running" forever;
+        # a second failure here would otherwise be swallowed by the daemon thread.
+        try:
+            with pool.connection() as conn:
+                conn.execute("UPDATE runs SET status = %s WHERE id = %s", ("failed", run_id))
+        except Exception:  # noqa: BLE001
+            log.exception("could not mark run %s failed", run_id)
         raise

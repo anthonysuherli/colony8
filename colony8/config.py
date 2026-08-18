@@ -11,7 +11,7 @@ class Settings(BaseSettings):
 
     database_url: str = "postgresql://root@localhost:26257/defaultdb?sslmode=disable"
     aws_region: str = "us-east-1"
-    bedrock_model_id: str = "anthropic.claude-opus-5"
+    bedrock_model_id: str = "us.amazon.nova-pro-v1:0"
     bedrock_embed_model_id: str = "amazon.titan-embed-text-v2:0"
     embed_dim: int = 1024
     tavily_api_key: str = ""

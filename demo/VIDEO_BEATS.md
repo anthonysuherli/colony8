@@ -1,4 +1,9 @@
-# colony8 demo — beats (target 2:40)
+# colony8 demo — beats (v1 plan, SUPERSEDED)
+
+> This was the pre-production plan. The shipped cut differs: it runs 2:27, drops the
+> standalone audit beat, and adds the benchmark and comparison segments.
+> **[`VIDEO_TIMESTAMPS.md`](VIDEO_TIMESTAMPS.md) is the source of truth for what is
+> actually on screen.** Kept only as a record of the original storyboard.
 
 0:00-0:20  Problem: 37% of multi-agent failures = inconsistent shared state.
            Slide with the claim + citation. "colony8 makes that impossible by construction."
@@ -12,4 +17,4 @@
            Memory survived.
 2:00-2:20  Audit: memory health panel — contradiction rate, chains — produced by an
            agent reading its OWN memory through the CockroachDB Managed MCP Server.
-2:20-2:40  Tool table + repo + "built in 5 days on the free tier". CTA.
+2:20-2:40  Tool table + repo + CTA.

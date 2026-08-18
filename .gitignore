@@ -12,3 +12,11 @@ executiontrace_dump/
 goroutine_dump/
 inflight_trace_dump/
 pprof_dump/
+
+# presentation + video build artifacts
+video/out/
+video/public/colony8-demo.mp4
+presentation/dist/site/
+presentation/.slidev/
+.DS_Store
+frontend/.env.production

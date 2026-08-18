@@ -1,0 +1,168 @@
+/* colony8 deck — same substrate as the ledger UI.
+   Ruled paper, mono for machine data, sans for claim prose. */
+
+:root {
+  --void: #070a0f;
+  --sheet: #0a0e15;
+  --rule: #16202e;
+  --rule-lit: #23334a;
+  --ink: #d7e3f4;
+  --ghost: #64768f;
+
+  --live: #35f0a8;
+  --retire: #ff4d6d;
+  --fence: #ffc247;
+  --trace: #5b8dff;
+
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, monospace;
+  --prose: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --rhythm: 28px;
+}
+
+.slidev-layout {
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(var(--rhythm) - 1px),
+      rgba(91, 141, 255, 0.045) calc(var(--rhythm) - 1px),
+      rgba(91, 141, 255, 0.045) var(--rhythm)
+    ),
+    radial-gradient(120% 80% at 50% -10%, #0f1826 0%, var(--void) 60%);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 28px 56px 54px; /* bottom reserves room for .slug */
+}
+
+.slidev-layout h1,
+.slidev-layout h2,
+.slidev-layout h3 {
+  font-family: var(--prose);
+  color: var(--ink);
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+.slidev-layout h1 { font-size: 54px; line-height: 1.02; margin: 0 0 6px; }
+.slidev-layout h2 { font-size: 26px; line-height: 1.1; margin: 0 0 12px; }
+.slidev-layout h3 { font-size: 20px; margin: 0 0 10px; }
+
+.slidev-layout a { color: var(--trace); text-decoration: none; }
+.slidev-layout strong { color: var(--ink); }
+
+/* ── eyebrow: the utility voice ─────────────────────────────── */
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ghost);
+  font-weight: 500;
+  margin: 0 0 12px;
+}
+
+.rule { border: 0; border-top: 1px solid var(--rule); margin: 22px 0; }
+
+/* ── prose vs machine data ──────────────────────────────────── */
+.prose { font-family: var(--prose); font-size: 19px; line-height: 1.45; }
+.dim { color: var(--ghost); }
+.live { color: var(--live); }
+.retire { color: var(--retire); }
+.fence { color: var(--fence); }
+.trace { color: var(--trace); }
+
+.big-stat {
+  font-family: var(--prose);
+  font-size: 132px;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  color: var(--retire);
+}
+
+.claim {
+  font-family: var(--prose);
+  font-size: 26px;
+  line-height: 1.3;
+  padding-left: 16px;
+  border-left: 2px solid var(--trace);
+  color: var(--ink);
+}
+
+/* ── tables read as ledger rows ─────────────────────────────── */
+.slidev-layout table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 13.5px;
+}
+.slidev-layout th {
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ghost);
+  font-weight: 500;
+  padding: 0 14px 8px 0;
+  border-bottom: 1px solid var(--rule-lit);
+}
+.slidev-layout td {
+  padding: 6px 14px 6px 0;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+  color: var(--ink);
+}
+.slidev-layout tbody tr:last-child td { border-bottom: 0; }
+
+/* ── code ───────────────────────────────────────────────────── */
+.slidev-layout pre {
+  background: var(--sheet) !important;
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--trace);
+  border-radius: 0 !important;
+  padding: 16px 18px !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+}
+.slidev-layout code { font-family: var(--mono); }
+.slidev-layout :not(pre) > code {
+  background: rgba(91, 141, 255, 0.1);
+  color: var(--ink);
+  padding: 1px 5px;
+  font-size: 0.9em;
+}
+
+/* ── panel: a boxed instrument reading ──────────────────────── */
+.panel {
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  padding: 18px 20px;
+}
+.panel-title {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ghost);
+  margin: 0 0 12px;
+}
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+/* footer slug on every slide */
+.slug {
+  position: absolute;
+  bottom: 22px;
+  left: 60px;
+  right: 60px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ghost);
+  border-top: 1px solid var(--rule);
+  padding-top: 10px;
+}

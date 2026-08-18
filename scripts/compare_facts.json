@@ -1,0 +1,2032 @@
+{
+  "_README": [
+    "Dataset for scripts/compare.py \u2014 100 facts across nine contradiction shapes.",
+    "Shapes are drawn from what production agent-memory systems actually resolve:",
+    "Zep/Graphiti's bi-temporal invalidation (event time vs ingestion time, validity",
+    "windows closed rather than deleted) and Mem0's ADD/UPDATE/DELETE/NOOP operations.",
+    "",
+    "revisions[0] is the seed, applied sequentially and unmeasured. The rest arrive",
+    "concurrently. `answer` is the value a correct memory should return afterwards and",
+    "is stated explicitly \u2014 for the out_of_order and tie shapes it is deliberately NOT",
+    "the last-ingested revision, which is the whole point of those cases.",
+    "",
+    "valid_at is the EVENT-time rank of each revision (when the claim was true), as distinct from its position in the list, which is ingestion order. They agree everywhere except the out_of_order shape, where the first-ingested revision has the LATEST event time. Only the Zep/Graphiti-style arm reads this field."
+  ],
+  "facts": [
+    {
+      "shape": "corrected",
+      "key": "boiling",
+      "answer": "water boils at 100.0C",
+      "revisions": [
+        [
+          "water boils at 90C",
+          0.91
+        ],
+        [
+          "water boils at 98C",
+          0.62
+        ],
+        [
+          "water boils at 100.0C",
+          0.97
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "freezing",
+      "answer": "water freezes at 0C",
+      "revisions": [
+        [
+          "water freezes at 4C",
+          0.93
+        ],
+        [
+          "water freezes at 0C",
+          0.88
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "capacity",
+      "answer": "specific heat is 4.186 J/gC",
+      "revisions": [
+        [
+          "specific heat is 2.1 J/gC",
+          0.9
+        ],
+        [
+          "specific heat is 4.186 J/gC",
+          0.82
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "density",
+      "answer": "density peaks at 3.98C",
+      "revisions": [
+        [
+          "density peaks at 0C",
+          0.85
+        ],
+        [
+          "density peaks at 3.98C",
+          0.93
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "vaporpress",
+      "answer": "vapor pressure is 3.17 kPa",
+      "revisions": [
+        [
+          "vapor pressure is 1.0 kPa",
+          0.77
+        ],
+        [
+          "vapor pressure is 3.17 kPa",
+          0.9
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "altitude",
+      "answer": "boiling drops 1C per 285m",
+      "revisions": [
+        [
+          "boiling drops 1C per 100m",
+          0.94
+        ],
+        [
+          "boiling drops 1C per 285m",
+          0.81
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "salinity",
+      "answer": "seawater freezes at -1.8C",
+      "revisions": [
+        [
+          "seawater freezes at 0C",
+          0.89
+        ],
+        [
+          "seawater freezes at -1.8C",
+          0.79
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "viscosity",
+      "answer": "viscosity is 0.89 mPa-s",
+      "revisions": [
+        [
+          "viscosity is 1.5 mPa-s",
+          0.92
+        ],
+        [
+          "viscosity is 0.89 mPa-s",
+          0.84
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "surftension",
+      "answer": "surface tension is 72 mN/m",
+      "revisions": [
+        [
+          "surface tension is 50 mN/m",
+          0.81
+        ],
+        [
+          "surface tension is 72 mN/m",
+          0.96
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "conductivity",
+      "answer": "thermal conductivity is 0.606 W/mK",
+      "revisions": [
+        [
+          "thermal conductivity is 0.2 W/mK",
+          0.88
+        ],
+        [
+          "thermal conductivity is 0.606 W/mK",
+          0.8
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "refraction",
+      "answer": "refractive index is 1.333",
+      "revisions": [
+        [
+          "refractive index is 1.00",
+          0.86
+        ],
+        [
+          "refractive index is 1.333",
+          0.91
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "dielectric",
+      "answer": "dielectric constant is 80.1",
+      "revisions": [
+        [
+          "dielectric constant is 21",
+          0.9
+        ],
+        [
+          "dielectric constant is 80.1",
+          0.83
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "earthradius",
+      "answer": "mean radius is 6371 km",
+      "revisions": [
+        [
+          "mean radius is 6000 km",
+          0.87
+        ],
+        [
+          "mean radius is 6371 km",
+          0.92
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "lightspeed",
+      "answer": "light travels 299792 km/s",
+      "revisions": [
+        [
+          "light travels 300000 km/s",
+          0.95
+        ],
+        [
+          "light travels 299792 km/s",
+          0.89
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "moondist",
+      "answer": "mean distance is 384400 km",
+      "revisions": [
+        [
+          "mean distance is 400000 km",
+          0.88
+        ],
+        [
+          "mean distance is 384400 km",
+          0.9
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "sunmass",
+      "answer": "solar mass is 1.989e30 kg",
+      "revisions": [
+        [
+          "solar mass is 1.5e30 kg",
+          0.79
+        ],
+        [
+          "solar mass is 1.989e30 kg",
+          0.93
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "avogadro",
+      "answer": "Avogadro constant is 6.02214e23",
+      "revisions": [
+        [
+          "Avogadro constant is 6.02e23",
+          0.94
+        ],
+        [
+          "Avogadro constant is 6.02214e23",
+          0.86
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "planck",
+      "answer": "Planck constant is 6.62607e-34 Js",
+      "revisions": [
+        [
+          "Planck constant is 6.6e-34 Js",
+          0.85
+        ],
+        [
+          "Planck constant is 6.62607e-34 Js",
+          0.92
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "gravity",
+      "answer": "standard gravity is 9.80665 m/s2",
+      "revisions": [
+        [
+          "standard gravity is 9.8 m/s2",
+          0.93
+        ],
+        [
+          "standard gravity is 9.80665 m/s2",
+          0.84
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "atmpressure",
+      "answer": "standard pressure is 101.325 kPa",
+      "revisions": [
+        [
+          "standard pressure is 100 kPa",
+          0.9
+        ],
+        [
+          "standard pressure is 101.325 kPa",
+          0.87
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "absolutezero",
+      "answer": "absolute zero is -273.15C",
+      "revisions": [
+        [
+          "absolute zero is -273C",
+          0.91
+        ],
+        [
+          "absolute zero is -273.15C",
+          0.88
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "humangenes",
+      "answer": "the genome has about 20000 genes",
+      "revisions": [
+        [
+          "the genome has about 100000 genes",
+          0.86
+        ],
+        [
+          "the genome has about 20000 genes",
+          0.94
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "neurons",
+      "answer": "the brain has about 86 billion neurons",
+      "revisions": [
+        [
+          "the brain has about 100 billion neurons",
+          0.92
+        ],
+        [
+          "the brain has about 86 billion neurons",
+          0.85
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "bloodph",
+      "answer": "arterial blood pH is 7.4",
+      "revisions": [
+        [
+          "arterial blood pH is 7.0",
+          0.89
+        ],
+        [
+          "arterial blood pH is 7.4",
+          0.93
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "dnabases",
+      "answer": "the genome has 3.1 billion base pairs",
+      "revisions": [
+        [
+          "the genome has 3 billion base pairs",
+          0.88
+        ],
+        [
+          "the genome has 3.1 billion base pairs",
+          0.82
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "everest",
+      "answer": "the summit is 8848.86 m",
+      "revisions": [
+        [
+          "the summit is 8840 m",
+          0.9
+        ],
+        [
+          "the summit is 8848.86 m",
+          0.87
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "oceandepth",
+      "answer": "the deepest point is 10935 m",
+      "revisions": [
+        [
+          "the deepest point is 10000 m",
+          0.85
+        ],
+        [
+          "the deepest point is 10935 m",
+          0.91
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "corrected",
+      "key": "atomicradius",
+      "answer": "the Bohr radius is 0.053 nm",
+      "revisions": [
+        [
+          "the Bohr radius is 0.1 nm",
+          0.83
+        ],
+        [
+          "the Bohr radius is 0.053 nm",
+          0.9
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "deep",
+      "key": "criticalt",
+      "answer": "critical temperature is 373.9C",
+      "revisions": [
+        [
+          "critical temperature is 300C",
+          0.72
+        ],
+        [
+          "critical temperature is 350C",
+          0.88
+        ],
+        [
+          "critical temperature is 370C",
+          0.79
+        ],
+        [
+          "critical temperature is 373.9C",
+          0.94
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "shape": "deep",
+      "key": "fusion",
+      "answer": "heat of fusion is 333.55 J/g",
+      "revisions": [
+        [
+          "heat of fusion is 200 J/g",
+          0.7
+        ],
+        [
+          "heat of fusion is 300 J/g",
+          0.86
+        ],
+        [
+          "heat of fusion is 330 J/g",
+          0.75
+        ],
+        [
+          "heat of fusion is 333.55 J/g",
+          0.92
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "shape": "deep",
+      "key": "vaporiz",
+      "answer": "heat of vaporization is 2256.4 J/g",
+      "revisions": [
+        [
+          "heat of vaporization is 2000 J/g",
+          0.74
+        ],
+        [
+          "heat of vaporization is 2200 J/g",
+          0.9
+        ],
+        [
+          "heat of vaporization is 2250 J/g",
+          0.71
+        ],
+        [
+          "heat of vaporization is 2257 J/g",
+          0.87
+        ],
+        [
+          "heat of vaporization is 2256.4 J/g",
+          0.95
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "shape": "deep",
+      "key": "triple",
+      "answer": "triple point is 0.01C at 611.657 Pa",
+      "revisions": [
+        [
+          "triple point is 0.0C",
+          0.93
+        ],
+        [
+          "triple point is 0.01C",
+          0.78
+        ],
+        [
+          "triple point is 0.0098C",
+          0.85
+        ],
+        [
+          "triple point is 0.01C at 611.657 Pa",
+          0.96
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "shape": "deep",
+      "key": "ionprod",
+      "answer": "ion product is 1.008e-14 at 25C",
+      "revisions": [
+        [
+          "ion product is 1e-13",
+          0.68
+        ],
+        [
+          "ion product is 5e-14",
+          0.83
+        ],
+        [
+          "ion product is 1e-14",
+          0.89
+        ],
+        [
+          "ion product is 1.008e-14 at 25C",
+          0.81
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "shape": "deep",
+      "key": "compress",
+      "answer": "compressibility is 4.59e-10 /Pa at 25C",
+      "revisions": [
+        [
+          "compressibility is 5.0e-10 /Pa",
+          0.75
+        ],
+        [
+          "compressibility is 4.8e-10 /Pa",
+          0.8
+        ],
+        [
+          "compressibility is 4.6e-10 /Pa",
+          0.88
+        ],
+        [
+          "compressibility is 4.59e-10 /Pa at 25C",
+          0.82
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "shape": "deep",
+      "key": "hubble",
+      "answer": "Hubble constant is 67.4 km/s/Mpc",
+      "revisions": [
+        [
+          "Hubble constant is 500 km/s/Mpc",
+          0.65
+        ],
+        [
+          "Hubble constant is 100 km/s/Mpc",
+          0.78
+        ],
+        [
+          "Hubble constant is 74 km/s/Mpc",
+          0.9
+        ],
+        [
+          "Hubble constant is 67.4 km/s/Mpc",
+          0.84
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "shape": "deep",
+      "key": "protonmass",
+      "answer": "proton mass is 1.67262e-27 kg",
+      "revisions": [
+        [
+          "proton mass is 1.6e-27 kg",
+          0.71
+        ],
+        [
+          "proton mass is 1.67e-27 kg",
+          0.85
+        ],
+        [
+          "proton mass is 1.672e-27 kg",
+          0.79
+        ],
+        [
+          "proton mass is 1.67262e-27 kg",
+          0.93
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "shape": "deep",
+      "key": "finestruct",
+      "answer": "fine-structure constant is 1/137.036",
+      "revisions": [
+        [
+          "fine-structure constant is 1/136",
+          0.69
+        ],
+        [
+          "fine-structure constant is 1/137",
+          0.87
+        ],
+        [
+          "fine-structure constant is 1/137.04",
+          0.76
+        ],
+        [
+          "fine-structure constant is 1/137.036",
+          0.91
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "shape": "deep",
+      "key": "electroncharge",
+      "answer": "elementary charge is 1.602177e-19 C",
+      "revisions": [
+        [
+          "elementary charge is 1.6e-19 C",
+          0.73
+        ],
+        [
+          "elementary charge is 1.602e-19 C",
+          0.86
+        ],
+        [
+          "elementary charge is 1.6022e-19 C",
+          0.8
+        ],
+        [
+          "elementary charge is 1.602177e-19 C",
+          0.94
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "shape": "deep",
+      "key": "boltzmann",
+      "answer": "Boltzmann constant is 1.380649e-23 J/K",
+      "revisions": [
+        [
+          "Boltzmann constant is 1.4e-23 J/K",
+          0.7
+        ],
+        [
+          "Boltzmann constant is 1.38e-23 J/K",
+          0.88
+        ],
+        [
+          "Boltzmann constant is 1.3806e-23 J/K",
+          0.77
+        ],
+        [
+          "Boltzmann constant is 1.380649e-23 J/K",
+          0.95
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "shape": "deep",
+      "key": "gasconstant",
+      "answer": "gas constant is 8.31446 J/molK",
+      "revisions": [
+        [
+          "gas constant is 8 J/molK",
+          0.68
+        ],
+        [
+          "gas constant is 8.3 J/molK",
+          0.84
+        ],
+        [
+          "gas constant is 8.314 J/molK",
+          0.9
+        ],
+        [
+          "gas constant is 8.31446 J/molK",
+          0.81
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "shape": "deep",
+      "key": "stefanboltz",
+      "answer": "Stefan-Boltzmann constant is 5.670374e-8",
+      "revisions": [
+        [
+          "Stefan-Boltzmann constant is 5.7e-8",
+          0.72
+        ],
+        [
+          "Stefan-Boltzmann constant is 5.67e-8",
+          0.89
+        ],
+        [
+          "Stefan-Boltzmann constant is 5.6704e-8",
+          0.78
+        ],
+        [
+          "Stefan-Boltzmann constant is 5.670374e-8",
+          0.92
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "shape": "deep",
+      "key": "rydberg",
+      "answer": "Rydberg constant is 10973731.6 /m",
+      "revisions": [
+        [
+          "Rydberg constant is 1.1e7 /m",
+          0.66
+        ],
+        [
+          "Rydberg constant is 1.097e7 /m",
+          0.82
+        ],
+        [
+          "Rydberg constant is 10973700 /m",
+          0.75
+        ],
+        [
+          "Rydberg constant is 10973731 /m",
+          0.88
+        ],
+        [
+          "Rydberg constant is 10973731.6 /m",
+          0.93
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "shape": "reasserted",
+      "key": "molarmass",
+      "answer": "molar mass is 18.02 g/mol",
+      "revisions": [
+        [
+          "molar mass is 18.02 g/mol",
+          0.94
+        ],
+        [
+          "molar mass is 18.02 g/mol",
+          0.89
+        ],
+        [
+          "molar mass is 18.02 g/mol",
+          0.91
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "shape": "reasserted",
+      "key": "phneutral",
+      "answer": "neutral pH is 7.0 at 25C",
+      "revisions": [
+        [
+          "neutral pH is 7.0 at 25C",
+          0.92
+        ],
+        [
+          "neutral pH is 7.0 at 25C",
+          0.88
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "reasserted",
+      "key": "bondangle",
+      "answer": "H-O-H bond angle is 104.5 degrees",
+      "revisions": [
+        [
+          "H-O-H bond angle is 104.5 degrees",
+          0.9
+        ],
+        [
+          "H-O-H bond angle is 104.5 degrees",
+          0.93
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "reasserted",
+      "key": "earthtilt",
+      "answer": "axial tilt is 23.44 degrees",
+      "revisions": [
+        [
+          "axial tilt is 23.44 degrees",
+          0.91
+        ],
+        [
+          "axial tilt is 23.44 degrees",
+          0.87
+        ],
+        [
+          "axial tilt is 23.44 degrees",
+          0.93
+        ]
+      ],
+      "valid_at": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "shape": "reasserted",
+      "key": "yearlength",
+      "answer": "a sidereal year is 365.256 days",
+      "revisions": [
+        [
+          "a sidereal year is 365.256 days",
+          0.95
+        ],
+        [
+          "a sidereal year is 365.256 days",
+          0.9
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "reasserted",
+      "key": "carbonmass",
+      "answer": "carbon-12 is exactly 12 u",
+      "revisions": [
+        [
+          "carbon-12 is exactly 12 u",
+          0.97
+        ],
+        [
+          "carbon-12 is exactly 12 u",
+          0.92
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "reasserted",
+      "key": "icedensity",
+      "answer": "ice density is 0.917 g/cm3",
+      "revisions": [
+        [
+          "ice density is 0.917 g/cm3",
+          0.89
+        ],
+        [
+          "ice density is 0.917 g/cm3",
+          0.91
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "reasserted",
+      "key": "soundwater",
+      "answer": "sound travels 1482 m/s in water",
+      "revisions": [
+        [
+          "sound travels 1482 m/s in water",
+          0.88
+        ],
+        [
+          "sound travels 1482 m/s in water",
+          0.9
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "reasserted",
+      "key": "oxygenpct",
+      "answer": "air is 20.95 percent oxygen",
+      "revisions": [
+        [
+          "air is 20.95 percent oxygen",
+          0.93
+        ],
+        [
+          "air is 20.95 percent oxygen",
+          0.89
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "reasserted",
+      "key": "sunage",
+      "answer": "the Sun is 4.6 billion years old",
+      "revisions": [
+        [
+          "the Sun is 4.6 billion years old",
+          0.9
+        ],
+        [
+          "the Sun is 4.6 billion years old",
+          0.94
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "stable",
+      "key": "formula",
+      "answer": "the molecular formula is H2O",
+      "revisions": [
+        [
+          "the molecular formula is H2O",
+          0.99
+        ]
+      ],
+      "valid_at": [
+        0
+      ]
+    },
+    {
+      "shape": "stable",
+      "key": "polarity",
+      "answer": "the molecule is polar",
+      "revisions": [
+        [
+          "the molecule is polar",
+          0.96
+        ]
+      ],
+      "valid_at": [
+        0
+      ]
+    },
+    {
+      "shape": "stable",
+      "key": "solvent",
+      "answer": "it is called the universal solvent",
+      "revisions": [
+        [
+          "it is called the universal solvent",
+          0.88
+        ]
+      ],
+      "valid_at": [
+        0
+      ]
+    },
+    {
+      "shape": "stable",
+      "key": "statesmatter",
+      "answer": "it occurs as solid, liquid and gas",
+      "revisions": [
+        [
+          "it occurs as solid, liquid and gas",
+          0.97
+        ]
+      ],
+      "valid_at": [
+        0
+      ]
+    },
+    {
+      "shape": "stable",
+      "key": "hydrogenbond",
+      "answer": "molecules form hydrogen bonds",
+      "revisions": [
+        [
+          "molecules form hydrogen bonds",
+          0.95
+        ]
+      ],
+      "valid_at": [
+        0
+      ]
+    },
+    {
+      "shape": "stable",
+      "key": "colorless",
+      "answer": "it is colorless in small volumes",
+      "revisions": [
+        [
+          "it is colorless in small volumes",
+          0.86
+        ]
+      ],
+      "valid_at": [
+        0
+      ]
+    },
+    {
+      "shape": "stable",
+      "key": "earthorbit",
+      "answer": "Earth orbits the Sun",
+      "revisions": [
+        [
+          "Earth orbits the Sun",
+          0.99
+        ]
+      ],
+      "valid_at": [
+        0
+      ]
+    },
+    {
+      "shape": "stable",
+      "key": "photosynth",
+      "answer": "plants use water in photosynthesis",
+      "revisions": [
+        [
+          "plants use water in photosynthesis",
+          0.94
+        ]
+      ],
+      "valid_at": [
+        0
+      ]
+    },
+    {
+      "shape": "stable",
+      "key": "electrolysis",
+      "answer": "electrolysis splits it into H2 and O2",
+      "revisions": [
+        [
+          "electrolysis splits it into H2 and O2",
+          0.92
+        ]
+      ],
+      "valid_at": [
+        0
+      ]
+    },
+    {
+      "shape": "stable",
+      "key": "icefloats",
+      "answer": "ice floats on liquid water",
+      "revisions": [
+        [
+          "ice floats on liquid water",
+          0.98
+        ]
+      ],
+      "valid_at": [
+        0
+      ]
+    },
+    {
+      "shape": "refinement",
+      "key": "seawaterph",
+      "answer": "surface seawater pH is 8.1, down from 8.2 pre-industrial",
+      "revisions": [
+        [
+          "surface seawater pH is 8.1",
+          0.88
+        ],
+        [
+          "surface seawater pH is 8.1, down from 8.2 pre-industrial",
+          0.91
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "refinement",
+      "key": "rainpH",
+      "answer": "unpolluted rain is pH 5.6 due to dissolved CO2",
+      "revisions": [
+        [
+          "unpolluted rain is pH 5.6",
+          0.86
+        ],
+        [
+          "unpolluted rain is pH 5.6 due to dissolved CO2",
+          0.9
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "refinement",
+      "key": "bodywater",
+      "answer": "adults are 60 percent water, varying with age and sex",
+      "revisions": [
+        [
+          "adults are 60 percent water",
+          0.89
+        ],
+        [
+          "adults are 60 percent water, varying with age and sex",
+          0.92
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "refinement",
+      "key": "oceanvolume",
+      "answer": "the oceans hold 1.335 billion km3, 96.5 percent of all water",
+      "revisions": [
+        [
+          "the oceans hold 1.335 billion km3",
+          0.87
+        ],
+        [
+          "the oceans hold 1.335 billion km3, 96.5 percent of all water",
+          0.9
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "refinement",
+      "key": "cloudform",
+      "answer": "clouds form when vapor condenses on nuclei above the dew point",
+      "revisions": [
+        [
+          "clouds form when vapor condenses",
+          0.85
+        ],
+        [
+          "clouds form when vapor condenses on nuclei above the dew point",
+          0.91
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "refinement",
+      "key": "osmosis",
+      "answer": "osmosis moves water across a semipermeable membrane down its potential gradient",
+      "revisions": [
+        [
+          "osmosis moves water across a membrane",
+          0.84
+        ],
+        [
+          "osmosis moves water across a semipermeable membrane down its potential gradient",
+          0.93
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "refinement",
+      "key": "glacierpct",
+      "answer": "glaciers hold 68.7 percent of all fresh water",
+      "revisions": [
+        [
+          "glaciers hold most fresh water",
+          0.82
+        ],
+        [
+          "glaciers hold 68.7 percent of all fresh water",
+          0.9
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "refinement",
+      "key": "watercycle",
+      "answer": "the cycle is evaporation, condensation, precipitation and collection",
+      "revisions": [
+        [
+          "the cycle is evaporation and precipitation",
+          0.83
+        ],
+        [
+          "the cycle is evaporation, condensation, precipitation and collection",
+          0.92
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "refinement",
+      "key": "desalination",
+      "answer": "reverse osmosis desalination uses 3 to 4 kWh per m3",
+      "revisions": [
+        [
+          "reverse osmosis is used for desalination",
+          0.86
+        ],
+        [
+          "reverse osmosis desalination uses 3 to 4 kWh per m3",
+          0.89
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "refinement",
+      "key": "aquifer",
+      "answer": "the Ogallala aquifer underlies 450000 km2 of the High Plains",
+      "revisions": [
+        [
+          "the Ogallala aquifer underlies the High Plains",
+          0.87
+        ],
+        [
+          "the Ogallala aquifer underlies 450000 km2 of the High Plains",
+          0.9
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "retraction",
+      "key": "polywater",
+      "answer": "polywater was retracted; it was silica contamination",
+      "revisions": [
+        [
+          "polywater is a distinct polymeric phase",
+          0.84
+        ],
+        [
+          "polywater was retracted; it was silica contamination",
+          0.96
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "retraction",
+      "key": "memorywater",
+      "answer": "water memory was retracted after failed replication",
+      "revisions": [
+        [
+          "water retains a memory of dissolved substances",
+          0.71
+        ],
+        [
+          "water memory was retracted after failed replication",
+          0.95
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "retraction",
+      "key": "eightglasses",
+      "answer": "the eight-glasses rule was retracted as unevidenced",
+      "revisions": [
+        [
+          "everyone must drink eight glasses a day",
+          0.88
+        ],
+        [
+          "the eight-glasses rule was retracted as unevidenced",
+          0.92
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "retraction",
+      "key": "coldwaterheat",
+      "answer": "no, hot water does not always freeze first; the claim was withdrawn",
+      "revisions": [
+        [
+          "hot water always freezes faster than cold",
+          0.79
+        ],
+        [
+          "no, hot water does not always freeze first; the claim was withdrawn",
+          0.9
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "retraction",
+      "key": "tonguemap",
+      "answer": "the tongue taste map was retracted as a mistranslation",
+      "revisions": [
+        [
+          "taste is mapped to distinct tongue zones",
+          0.85
+        ],
+        [
+          "the tongue taste map was retracted as a mistranslation",
+          0.94
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "retraction",
+      "key": "brainten",
+      "answer": "the ten-percent brain claim was retracted as a myth",
+      "revisions": [
+        [
+          "humans use ten percent of the brain",
+          0.83
+        ],
+        [
+          "the ten-percent brain claim was retracted as a myth",
+          0.97
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "retraction",
+      "key": "canalsmars",
+      "answer": "the Martian canals were retracted as an optical artifact",
+      "revisions": [
+        [
+          "Mars is crossed by artificial canals",
+          0.76
+        ],
+        [
+          "the Martian canals were retracted as an optical artifact",
+          0.95
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "retraction",
+      "key": "phlogiston",
+      "answer": "phlogiston was retracted in favor of oxidation",
+      "revisions": [
+        [
+          "combustion releases phlogiston",
+          0.74
+        ],
+        [
+          "phlogiston was retracted in favor of oxidation",
+          0.96
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "preference",
+      "key": "prefunit",
+      "answer": "the team now reports temperatures in kelvin",
+      "revisions": [
+        [
+          "the team reports temperatures in celsius",
+          0.9
+        ],
+        [
+          "the team now reports temperatures in kelvin",
+          0.86
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "preference",
+      "key": "prefcitation",
+      "answer": "the team now cites NIST rather than the 2019 handbook",
+      "revisions": [
+        [
+          "the team cites the 2019 handbook",
+          0.88
+        ],
+        [
+          "the team now cites NIST rather than the 2019 handbook",
+          0.93
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "preference",
+      "key": "prefformat",
+      "answer": "findings are now written as single-sentence claims",
+      "revisions": [
+        [
+          "findings are written as paragraphs",
+          0.85
+        ],
+        [
+          "findings are now written as single-sentence claims",
+          0.91
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "preference",
+      "key": "prefprecision",
+      "answer": "values are now reported to four significant figures",
+      "revisions": [
+        [
+          "values are reported to two significant figures",
+          0.87
+        ],
+        [
+          "values are now reported to four significant figures",
+          0.84
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "preference",
+      "key": "prefsource",
+      "answer": "peer-reviewed sources are now preferred over preprints",
+      "revisions": [
+        [
+          "preprints are acceptable sources",
+          0.82
+        ],
+        [
+          "peer-reviewed sources are now preferred over preprints",
+          0.94
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "preference",
+      "key": "prefreview",
+      "answer": "two reviewers are now required per finding",
+      "revisions": [
+        [
+          "one reviewer is required per finding",
+          0.89
+        ],
+        [
+          "two reviewers are now required per finding",
+          0.86
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "preference",
+      "key": "preflang",
+      "answer": "reports are now written in plain English",
+      "revisions": [
+        [
+          "reports are written in technical register",
+          0.86
+        ],
+        [
+          "reports are now written in plain English",
+          0.9
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "preference",
+      "key": "prefstorage",
+      "answer": "the team now stores findings in CockroachDB rather than files",
+      "revisions": [
+        [
+          "the team stores findings in flat files",
+          0.84
+        ],
+        [
+          "the team now stores findings in CockroachDB rather than files",
+          0.92
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "out_of_order",
+      "key": "ooarctic",
+      "answer": "as of 2024 the September sea-ice minimum is 4.28 million km2",
+      "revisions": [
+        [
+          "as of 2024 the September sea-ice minimum is 4.28 million km2",
+          0.94
+        ],
+        [
+          "as of 2012 the September sea-ice minimum was 3.39 million km2",
+          0.79
+        ]
+      ],
+      "valid_at": [
+        2,
+        1
+      ]
+    },
+    {
+      "shape": "out_of_order",
+      "key": "oosealevel",
+      "answer": "as of 2024 mean sea level is 101 mm above the 1993 baseline",
+      "revisions": [
+        [
+          "as of 2024 mean sea level is 101 mm above the 1993 baseline",
+          0.93
+        ],
+        [
+          "as of 2010 mean sea level was 50 mm above the 1993 baseline",
+          0.8
+        ]
+      ],
+      "valid_at": [
+        2,
+        1
+      ]
+    },
+    {
+      "shape": "out_of_order",
+      "key": "ooco2",
+      "answer": "as of 2024 atmospheric CO2 is 422 ppm",
+      "revisions": [
+        [
+          "as of 2024 atmospheric CO2 is 422 ppm",
+          0.95
+        ],
+        [
+          "as of 2005 atmospheric CO2 was 380 ppm",
+          0.78
+        ]
+      ],
+      "valid_at": [
+        2,
+        1
+      ]
+    },
+    {
+      "shape": "out_of_order",
+      "key": "ooglacier",
+      "answer": "as of 2024 Swiss glacier volume is 46.5 km3",
+      "revisions": [
+        [
+          "as of 2024 Swiss glacier volume is 46.5 km3",
+          0.92
+        ],
+        [
+          "as of 2000 Swiss glacier volume was 75 km3",
+          0.81
+        ]
+      ],
+      "valid_at": [
+        2,
+        1
+      ]
+    },
+    {
+      "shape": "out_of_order",
+      "key": "ooreservoir",
+      "answer": "as of 2024 Lake Mead is at 34 percent capacity",
+      "revisions": [
+        [
+          "as of 2024 Lake Mead is at 34 percent capacity",
+          0.91
+        ],
+        [
+          "as of 2000 Lake Mead was at 95 percent capacity",
+          0.77
+        ]
+      ],
+      "valid_at": [
+        2,
+        1
+      ]
+    },
+    {
+      "shape": "out_of_order",
+      "key": "ooocean",
+      "answer": "as of 2024 ocean heat content is 287 zettajoules above 1981-2010",
+      "revisions": [
+        [
+          "as of 2024 ocean heat content is 287 zettajoules above 1981-2010",
+          0.93
+        ],
+        [
+          "as of 2015 ocean heat content was 150 zettajoules above 1981-2010",
+          0.79
+        ]
+      ],
+      "valid_at": [
+        2,
+        1
+      ]
+    },
+    {
+      "shape": "tie",
+      "key": "tiewelldepth",
+      "answer": "the well is 412 m deep",
+      "revisions": [
+        [
+          "the well is 412 m deep",
+          0.93
+        ],
+        [
+          "the well is 380 m deep",
+          0.74
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "tie",
+      "key": "tieflowrate",
+      "answer": "the river flows at 209000 m3/s",
+      "revisions": [
+        [
+          "the river flows at 209000 m3/s",
+          0.95
+        ],
+        [
+          "the river flows at 176000 m3/s",
+          0.72
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "tie",
+      "key": "tielakearea",
+      "answer": "the lake covers 31700 km2",
+      "revisions": [
+        [
+          "the lake covers 31700 km2",
+          0.92
+        ],
+        [
+          "the lake covers 28000 km2",
+          0.75
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "tie",
+      "key": "tierainfall",
+      "answer": "annual rainfall is 11871 mm",
+      "revisions": [
+        [
+          "annual rainfall is 11871 mm",
+          0.94
+        ],
+        [
+          "annual rainfall is 11000 mm",
+          0.73
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "tie",
+      "key": "tiespring",
+      "answer": "the spring discharges 3.5 m3/s",
+      "revisions": [
+        [
+          "the spring discharges 3.5 m3/s",
+          0.91
+        ],
+        [
+          "the spring discharges 2.8 m3/s",
+          0.76
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    },
+    {
+      "shape": "tie",
+      "key": "tieaquiferage",
+      "answer": "the aquifer water is 35000 years old",
+      "revisions": [
+        [
+          "the aquifer water is 35000 years old",
+          0.9
+        ],
+        [
+          "the aquifer water is 20000 years old",
+          0.74
+        ]
+      ],
+      "valid_at": [
+        0,
+        1
+      ]
+    }
+  ]
+}

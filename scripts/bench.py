@@ -118,7 +118,9 @@ def main() -> None:
     lost = n - deferred - (total_pop - 1)  # every non-deferred candidate must have landed
     print(f"contention run: {n} conflicting writes -> {live} live fact, "
           f"{total_pop - live} retired with audit chains")
-    print(f"serialization retries absorbed: {classify_calls[0] - n}   "
+    # A re-classify happens on either retry path: version drift (StaleSnapshot) or
+    # SQLSTATE 40001. The counter cannot tell them apart, so name it for both.
+    print(f"conflict retries absorbed (drift + 40001): {classify_calls[0] - n}   "
           f"lost writes: {lost if lost else 0}   deferred (parked, not dropped): {deferred}")
     pool.close()
 

@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 660" width="1040" height="660" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5b8dff"/>
+    </marker>
+    <marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#35f0a8"/>
+    </marker>
+    <style>
+      .b { fill:#0a0e15; stroke:#23334a; stroke-width:1.5 }
+      .t { fill:#d7e3f4; font-size:15px; font-weight:600 }
+      .s { fill:#64768f; font-size:11.5px }
+      .k { fill:#35f0a8; font-size:10px; letter-spacing:1.6px }
+      .e { fill:#5b8dff; font-size:10px; letter-spacing:1.6px }
+      .r { fill:#ff4d6d; font-size:10px; letter-spacing:1.6px }
+      .l { fill:#64768f; font-size:10.5px; letter-spacing:1.2px }
+      .ln { stroke:#5b8dff; stroke-width:1.5; fill:none; marker-end:url(#a) }
+      .lnm { stroke:#35f0a8; stroke-width:1.5; fill:none; marker-end:url(#am) }
+    </style>
+  </defs>
+
+  <rect width="1040" height="660" fill="#070a0f"/>
+
+  <!-- ledger ruling, echoing the UI substrate -->
+  <g stroke="#5b8dff" stroke-opacity="0.05">
+    <path d="M0 28H1040M0 56H1040M0 84H1040M0 112H1040M0 140H1040M0 168H1040M0 196H1040M0 224H1040M0 252H1040M0 280H1040M0 308H1040M0 336H1040M0 364H1040M0 392H1040M0 420H1040M0 448H1040M0 476H1040M0 504H1040M0 532H1040M0 560H1040M0 588H1040M0 616H1040M0 644H1040"/>
+  </g>
+
+  <!-- 1. UI -->
+  <rect class="b" x="330" y="26" width="380" height="66" rx="2"/>
+  <text class="k" x="348" y="49">REACT LEDGER UI · S3 + CLOUDFRONT</text>
+  <text class="s" x="348" y="72">live findings · supersede chains · memory health</text>
+
+  <path class="ln" d="M520 92 V132"/>
+  <text class="l" x="532" y="117">REST, 2s poll</text>
+
+  <!-- 2. orchestrator -->
+  <rect class="b" x="330" y="132" width="380" height="66" rx="2"/>
+  <text class="k" x="348" y="155">FASTAPI ORCHESTRATOR · AWS LAMBDA</text>
+  <text class="s" x="348" y="178">plans subtopics, fans the fleet out, serves the ledger</text>
+
+  <!-- planner -->
+  <rect class="b" x="40" y="132" width="230" height="66" rx="2"/>
+  <text class="k" x="58" y="155">PLANNER AGENT</text>
+  <text class="s" x="58" y="178">Bedrock · Claude</text>
+  <path class="ln" d="M270 165 H322"/>
+
+  <!-- 3. researchers -->
+  <path class="ln" d="M280 198 V246"/>
+  <path class="ln" d="M520 198 V246"/>
+  <path class="ln" d="M760 198 V246"/>
+  <text class="l" x="300" y="228">spawn ×3 — stateless workers</text>
+
+  <g>
+    <rect class="b" x="180" y="246" width="200" height="62" rx="2"/>
+    <text class="k" x="196" y="269">RESEARCHER</text>
+    <text class="s" x="196" y="291">Bedrock + Tavily</text>
+    <rect class="b" x="420" y="246" width="200" height="62" rx="2"/>
+    <text class="k" x="436" y="269">RESEARCHER</text>
+    <text class="s" x="436" y="291">Bedrock + Tavily</text>
+    <rect class="b" x="660" y="246" width="200" height="62" rx="2"/>
+    <text class="k" x="676" y="269">RESEARCHER</text>
+    <text class="s" x="676" y="291">Bedrock + Tavily</text>
+  </g>
+  <path class="ln" d="M280 308 V356"/>
+  <path class="ln" d="M520 308 V356"/>
+  <path class="ln" d="M760 308 V356"/>
+  <text class="l" x="300" y="338">they hold zero memory of their own — every write goes through the same door</text>
+
+  <!-- 4. resolver -->
+  <rect class="b" x="180" y="356" width="680" height="118" rx="2"/>
+  <text class="e" x="200" y="380">WRITE-TIME RESOLVER — one candidate, one verdict, one transaction</text>
+
+  <rect x="200" y="396" width="188" height="58" fill="#0d1420" stroke="#23334a"/>
+  <text class="k" x="214" y="418">01 SNAPSHOT</text>
+  <text class="s" x="214" y="438">vector recall, no lock</text>
+
+  <rect x="404" y="396" width="188" height="58" fill="#0d1420" stroke="#23334a"/>
+  <text class="k" x="418" y="415">02 CLASSIFY</text>
+  <text class="s" x="418" y="433">add · update</text>
+  <text class="s" x="418" y="448">noop · supersede</text>
+
+  <rect x="608" y="396" width="234" height="58" fill="#0d1420" stroke="#5b8dff"/>
+  <text class="e" x="622" y="418">03 APPLY</text>
+  <text class="s" x="622" y="438">SERIALIZABLE, version-fenced</text>
+
+  <path class="ln" d="M388 425 H400"/>
+  <path class="ln" d="M592 425 H604"/>
+
+  <text class="r" x="200" y="500">VERSION DRIFT OR SQLSTATE 40001 → RE-SNAPSHOT AND RETRY</text>
+  <text class="r" x="200" y="518">RETRIES EXHAUSTED → DEFERRED EVENT — the write is parked, never dropped</text>
+
+  <path class="lnm" d="M520 528 V566"/>
+
+  <!-- 5. CockroachDB -->
+  <rect class="b" x="180" y="566" width="680" height="70" rx="2" stroke="#35f0a8"/>
+  <text class="k" x="200" y="590">COCKROACHDB CLOUD — the single shared memory</text>
+  <text class="s" x="200" y="612">findings · resolution_events · runs · C-SPANN vector index (cosine)</text>
+
+  <!-- 6. audit agent via MCP -->
+  <rect class="b" x="890" y="132" width="118" height="504" rx="2"/>
+  <text class="k" x="906" y="155">MEMORY-</text>
+  <text class="k" x="906" y="171">AUDIT</text>
+  <text class="k" x="906" y="187">AGENT</text>
+  <text class="s" x="906" y="212">Bedrock</text>
+  <text class="l" x="906" y="248">reads its</text>
+  <text class="l" x="906" y="264">own memory</text>
+  <text class="l" x="906" y="280">through the</text>
+  <text class="l" x="906" y="296">CockroachDB</text>
+  <text class="l" x="906" y="312">Cloud Managed</text>
+  <text class="l" x="906" y="328">MCP Server</text>
+  <text class="l" x="906" y="352">(read-only SQL)</text>
+  <path class="lnm" d="M860 601 H884"/>
+</svg>

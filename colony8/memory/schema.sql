@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS findings (
   run_id UUID NOT NULL REFERENCES runs(id),
   title STRING NOT NULL,
   content JSONB NOT NULL,
-  embedding VECTOR(1024) NOT NULL,
+  embedding VECTOR(__EMBED_DIM__) NOT NULL,
   provenance JSONB NOT NULL,
   confidence FLOAT NOT NULL DEFAULT 0.7,
   version INT NOT NULL DEFAULT 1,

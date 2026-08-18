@@ -1,18 +1,17 @@
-"""Bedrock access: Claude via the Anthropic Mantle client, embeddings via Titan (boto3)."""
+"""Bedrock access via boto3: Claude through the Converse API, embeddings via Titan.
+
+Converse with a forced tool call carries the JSON-schema contract. The Anthropic SDK's
+InvokeModel path is gated on a per-account use-case form that Converse is not, so
+Converse is also the more portable choice for judges reproducing the deploy.
+"""
 from __future__ import annotations
 
 import json
 from functools import lru_cache
 
 import boto3
-from anthropic import AnthropicBedrockMantle
 
 from colony8.config import get_settings
-
-
-@lru_cache
-def _claude() -> AnthropicBedrockMantle:
-    return AnthropicBedrockMantle(aws_region=get_settings().aws_region)
 
 
 @lru_cache
@@ -22,16 +21,23 @@ def _bedrock_rt():
 
 def llm_json(prompt: str, schema: dict, max_tokens: int = 2000) -> dict:
     s = get_settings()
-    resp = _claude().messages.create(
-        model=s.bedrock_model_id,
-        max_tokens=max_tokens,
-        output_config={"format": {"type": "json_schema", "schema": schema}},
-        messages=[{"role": "user", "content": prompt}],
+    resp = _bedrock_rt().converse(
+        modelId=s.bedrock_model_id,
+        messages=[{"role": "user", "content": [{"text": prompt}]}],
+        inferenceConfig={"maxTokens": max_tokens},
+        toolConfig={
+            "tools": [{"toolSpec": {
+                "name": "emit",
+                "description": "Return the answer as structured JSON.",
+                "inputSchema": {"json": schema},
+            }}],
+            "toolChoice": {"tool": {"name": "emit"}},
+        },
     )
-    if resp.stop_reason == "refusal":
-        raise RuntimeError("model refused request")
-    text = next(b.text for b in resp.content if b.type == "text")
-    return json.loads(text)
+    for block in resp["output"]["message"]["content"]:
+        if "toolUse" in block:
+            return block["toolUse"]["input"]
+    raise RuntimeError(f"no structured output returned (stopReason={resp.get('stopReason')})")
 
 
 def embed(text: str) -> list[float]:

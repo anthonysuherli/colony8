@@ -40,6 +40,25 @@ def test_recall_excludes_invalidated(pool, run_id) -> None:
     assert old not in ids and new in ids
 
 
+def test_recall_colony_crosses_runs(pool, run_id) -> None:
+    import uuid
+
+    from colony8.memory.store import recall_colony
+
+    other = str(uuid.uuid4())
+    with pool.connection() as conn:
+        conn.execute("INSERT INTO runs (id, question) VALUES (%s, %s)", (other, "other session"))
+    emb = fake_embed("altitude: boiling point falls with elevation")
+    with pool.connection() as conn:
+        fid = insert_finding(conn, run_id,
+                             _cand("altitude: boiling point falls with elevation"), emb)
+        oid = insert_finding(conn, other,
+                             _cand("altitude: cooking takes longer at elevation"), emb)
+    got = {m.id: m for m in recall_colony(pool, fake_embed("altitude: cooking"), k=10)}
+    assert fid in got and oid in got  # no run fence: both sessions' memory is visible
+    assert got[fid].run_id == run_id and got[oid].run_id == other
+
+
 def test_invalidate_stale_version_raises(pool, run_id) -> None:
     from colony8.memory.store import StaleSnapshot, invalidate
 

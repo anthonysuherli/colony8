@@ -22,5 +22,17 @@
     "title": "Thermal Properties of Liquids",
     "topics": ["water", "heat", "physics"],
     "content": "Water's specific heat capacity is 4.186 J/gC, unusually high among common liquids, which is why coastal climates are milder than continental ones."
+  },
+  {
+    "url": "https://demo.colony8.dev/altitude-cooking-guide",
+    "title": "Expedition Cooking Field Guide",
+    "topics": ["water", "altitude", "cooking"],
+    "content": "At standard atmospheric pressure water boils at 100.0C, but boiling point falls with elevation. Because the water is cooler, pasta and rice need roughly 25% more cooking time per 1000m of elevation gain."
+  },
+  {
+    "url": "https://demo.colony8.dev/expedition-hydration",
+    "title": "High-Altitude Hydration Guidelines",
+    "topics": ["water", "altitude", "hydration"],
+    "content": "Respiratory water loss roughly doubles at high altitude. Expedition guidelines put daily water needs about 1.5L above the sea-level baseline."
   }
 ]
